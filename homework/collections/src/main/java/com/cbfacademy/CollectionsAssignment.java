@@ -2,7 +2,10 @@ package com.cbfacademy;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class CollectionsAssignment {
 
@@ -15,6 +18,13 @@ public class CollectionsAssignment {
      * @param minValue the minimum value to retain
      */
     public static void removeSmallInts(List<Integer> list, int minValue) {
+        //Iterate through the list from the last to the 1st element
+        for (int i = list.size() -1; i>= 0; i--){
+            if (list.get(i) < minValue) {
+                list.remove(list.get(i));
+            }
+        }
+
         // Your solution must traverse the list from last to first element
         // removing any values less than minValue.
     }
@@ -28,7 +38,8 @@ public class CollectionsAssignment {
      */
     public static boolean containsDuplicates(Collection<Integer> integers) {
         // Your solution must not use any loops.
-        return false;
+        return new HashSet<>(integers).size() != integers.size();
+       
     }
 
     /**
@@ -48,8 +59,13 @@ public class CollectionsAssignment {
      */
     public static ArrayList<Integer> inEither(Collection<Integer> ints1, Collection<Integer> ints2) {
         // This must be done with no loops.
-        return new ArrayList<Integer>();
+
+        HashSet<Integer> uniqueSet = new HashSet<>();
+        uniqueSet.addAll(ints1);
+        uniqueSet.addAll(ints2);
+        return new ArrayList<Integer>(uniqueSet);
     }
+
 
     /**
      * This method returns an ArrayList containing all elements that appear in
@@ -66,8 +82,20 @@ public class CollectionsAssignment {
      */
     public static ArrayList<Integer> inBoth(Collection<Integer> ints1, Collection<Integer> ints2) {
         // This must be done with no loops.
-        return new ArrayList<>();
+        ArrayList<Integer> result = new ArrayList<>();
+        HashSet<Integer> set1 = new HashSet<>(ints1);
+        for (Integer num : ints2) {
+            if (set1.contains(num)) {
+                result.add(num);
+            }
+        } 
+
+        return new ArrayList<>(result);
     }
+
+
+
+
 
     /**
      * This method returns the String that appears most frequently in the
@@ -80,15 +108,35 @@ public class CollectionsAssignment {
      * @return the most frequently occurring String
      */
     public static String mostFrequent(List<String> list) {
-        // You should solve this problem in two stages: First iterate through
-        // the list to count occurrences of each String. Then iterate through
-        // your counts to find the largest. You'll need a collection that allows
-        // you to store a mapping from Strings to counts.
-        // No nested loops or non-enhanced for-loops are allowed.
-        return "";
+        //Create a new hashmap
+           Map<String, Integer> stringCounts = new HashMap<>();
+           // You should solve this problem in two stages: First iterate through
+        // the list to count occurrences of each String
+           for (String str : list) {
+        // string is already in the map? add its count; otherwise, add it with count 1
+            stringCounts.put(str, stringCounts.getOrDefault(str, 0) + 1);
+            }
+            String mostFrequentString = "";
+        int maxCount = 0;
+        for (Map.Entry<String, Integer> entry : stringCounts.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                mostFrequentString = entry.getKey();
+                maxCount = entry.getValue();
+            }
+        }
+
+        // Step 4: Return the most frequent string
+        return mostFrequentString;
     }
 
     public static String getName() {
         return "Collections Assignment";
     }
 }
+
+
+
+       //Then iterate through your counts to find the largest. You'll need a collection that allows
+        // you to store a mapping from Strings to counts.
+        // No nested loops or non-enhanced for-loops are allowed.
+        
